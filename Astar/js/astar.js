@@ -80,7 +80,15 @@ function calcPos(i){
 
 
 function distance(pos1,pos2){
-    return Math.sqrt(Math.pow(pos1[0] - pos2[0],2) + Math.pow(pos1[1] - pos2[1], 2));
+    // return Math.sqrt(Math.pow(pos1[0] - pos2[0],2) + Math.pow(pos1[1] - pos2[1], 2));
+    x = Math.abs(pos2[0] - pos1[0]);
+    y = Math.abs(pos2[1] - pos1[1]);
+    if(x > y){
+        return (1.41 * y) + x - y;
+    }
+    else{
+        return (1.41 * x) + y -x;
+    }
 }
 
 
