@@ -1,8 +1,8 @@
-var startnum = 23;
-var endnum = 14;
+var startnum = 125;
+var endnum = 45;
 var wallboxes = [];
-var base = 7;
-var height = 4;
+var base = 24;
+var height = 12;
 var displaynumbs = false;
 var locked = false;
 var allowdrag = false;
@@ -125,6 +125,29 @@ function getBoard(){
 }
 
 
+function findLowestF(arr){
+    // console.log("ran lowestF")
+    lowest = 1000000;
+    c = 0;
+    lowestIDs = [];
+    for(var i = 0; i < arr.length; i++){
+        if (arr[i].f < lowest){
+            lowest = arr[i].f;
+        }
+    }
+    for(var i = 0; i < arr.length; i++){
+        if(Math.round(arr[i].f * 100)/100 == Math.round(lowest * 100)/ 100){
+            // console.log("does this exist")
+            c++;
+            lowestIDs.push(arr[i].id)
+        }
+    }
+    // console.log(lowest)
+    // console.log(c)
+    return [lowest, c, lowestIDs];
+}
+
+
 function aStar(board)
 {
     t0 = performance.now()
@@ -166,8 +189,10 @@ function aStar(board)
                 }
             }
 
-            lowestF=100000;
-            lowestH=100000;
+            farr = []
+            harr = []
+            fTimes = 0
+            lowestFIDs = []
             for (var i = 0; i < board.length; i++)
             {   
                 if(board[i].discby == 10000){
@@ -177,7 +202,6 @@ function aStar(board)
                 flag=0;
                 if (path.length > 0){
                     for(var j=0; j<path.length;j++){
-                        
                         if (path[j] == i){
                             flag = 1;
                         }
@@ -186,25 +210,33 @@ function aStar(board)
                 if(flag == 1){
                     // document.writeln("flagged:" +i);
                     continue;
-                    
                 }
-                if (board[i].f < lowestF){
-                    lowestF = board[i].f;
-                    next = i;
-                }
-                else if(board[i].f == lowestF)
-                {
-                    if(board[i].h < lowestH)
-                    {
-                        lowestH = board[i].h;
-                        next = i;
-                    }
-                    else if(lowestH == board[i].h) 
-                    {
-                        next = i;
+                farr.push(board[i]);
+                // harr.push(board[i].h);
+            }
+
+            temp = findLowestF(farr)
+            lowestF = temp[0]
+            fTimes = temp[1]
+            lowestH = 100000
+            lowestFIDs = temp[2]
+            // console.log(lowestF)
+            // console.log(fTimes)
+            // console.log(JSON.stringify(lowestFIDs))
+            if(fTimes > 1){
+                // console.log("heyo")
+                for(var i = 0; i < lowestFIDs.length; i++){
+                    if(board[lowestFIDs[i] - 1].h < lowestH){
+                        lowestH = board[lowestFIDs[i] - 1].h
+                        next = lowestFIDs[i] - 1;
+                        // console.log(next)
                     }
                 }
             }
+            else{
+                next = lowestFIDs[0] -1;
+            }
+
 
             idd++;
             currentnum = next;
@@ -217,7 +249,7 @@ function aStar(board)
             }
             else{
                 // document.getElementById(String(next+1)).className = 'path';
-                bum(next, idd);
+                pathInterval(next, idd);
             }
             
             if (idd == 10000)
@@ -233,10 +265,16 @@ function aStar(board)
 }
 
 
-function bum(n, i){
+function pathInterval(n, i){
     interval = setTimeout(function(){
         document.getElementById(String(n+1)).className = 'pulse path';
     }, 20* i);
+}
+
+function fpathInterval(n, i){
+    interval = setTimeout(function(){
+        document.getElementById(String(n)).className = 'fpulse fpath';
+    }, 40* i);
 }
 
 
@@ -244,14 +282,16 @@ function selectpath(path, board, t){
     setTimeout(function(){
         var boxpath = [];
         var nextpath = board[endnum-1].discby;
+        c = 0;
         for(var i =0;i<path.length; i++){
-            document.getElementById(String(nextpath)).className = 'fpulse fpath';
+            c++;
+            fpathInterval(nextpath, c);
             nextpath = board[nextpath-1].discby;
             if(nextpath == startnum){
                 break;
             }
         }
-    }, (20*t) + 1000)
+    }, (20*t) + 200)
 
 }
 
@@ -437,6 +477,16 @@ function dragg(id){
                 }
             }
         }
+    }
+}
+
+
+function darkmode(){
+    document.body.style.backgroundColor = "black";
+    document.getElementsByTagName('H1')[0].style.color = "white";
+    allBoxes = document.getElementsByClassName;
+    for(var i = 0; i < allBoxes.length; i++) {
+        allBoxes[i].style.color = "#181818";
     }
 }
 

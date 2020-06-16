@@ -33,7 +33,7 @@ div{
 }
 
 .start{
-    background-color: blue !important;
+    background-color: greenyellow !important;
 }
 
 .end{
@@ -41,35 +41,35 @@ div{
 }
 
 .wall{
-    background-color: black !important;
+    background-color: purple !important;
 }
 
 .box{
-    background-color: lightgreen;
+    background-color: lightsmoke;
 }
 .path{
-    background-color: lightyellow;
+    background-color: lightskyblue;
 }
 .fpath{
-    background-color: yellow;
+    background-color: blue;
 }
 .Sbox:hover{
-    background-color: lightblue !important;
+    background-color: lightgreen !important;
 }
 .Ebox:hover{
     background-color: lightcoral !important;
 }
 @keyframes change{
-    from {background-color: lightgreen ;
+    from {background-color: whitesmoke ;
     }
-    to {background-color: lightyellow ;
+    to {background-color: lightskyblue ;
     }
 }
   
 @keyframes fchange{
-    from {background-color: lightyellow ;
+    from {background-color: lightskyblue ;
     }
-    to {background-color: yellow ;
+    to {background-color: blue ;
     }
 }
 
